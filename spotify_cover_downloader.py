@@ -2,6 +2,7 @@ import requests
 import os
 import argparse
 import sys
+import hashlib
 from urlparse import urlparse
 
 CLIENT_ID = ""
@@ -57,11 +58,14 @@ def spotify_cover_downloader(url, client_id, client_secret, directory):
     response = requests.get(url, headers=headers).json()
 
     cover_url = response['album']['images'][0]['url']
-    file_name = response['id'] + '.jpeg'
-    if directory:
-        file_name = os.path.join(directory, file_name)
 
     img_data = requests.get(cover_url).content
+    hash_md5 = hashlib.md5()
+    hash_md5.update(img_data)
+
+    if directory:
+        file_name = os.path.join(directory, hash_md5.hexdigest() + ".jpeg")
+
     with open(file_name, 'wb') as handler:
         handler.write(img_data)
 
