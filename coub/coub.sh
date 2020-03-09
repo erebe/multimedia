@@ -14,7 +14,7 @@ ffmpeg -hide_banner -t 10 -f concat -i ${name}.txt -i ${name}.mp3 -c copy -short
 
 # Version without watermark
 echo '' > "${name}.txt"
-./remove_watermark.py "${name}_.mp4"
+venv/bin/python remove_watermark.py "${name}_.mp4"
 for i in `seq 1 "$loops"`; do echo "file '${name}_.mp4.avi'" >> ${name}.txt; done
 ffmpeg -hide_banner -t 10 -f concat -i ${name}.txt -i ${name}.mp3 -c copy -shortest -movflags faststart "$name".mp4.avi
 
